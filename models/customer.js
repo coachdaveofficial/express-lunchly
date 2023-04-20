@@ -29,6 +29,23 @@ class Customer {
     return results.rows.map(c => new Customer(c));
   }
 
+  /** get 10 customers with the most reservations. */
+
+  static async bestCustomers() {
+    const results = await db.query(
+      `SELECT c.id, c.first_name AS "firstName", c.last_name AS "lastName", c.phone, c.notes, COUNT(*) AS reservation_count
+      FROM customers c
+      JOIN reservations r ON c.id = r.customer_id
+      GROUP BY c.id
+      ORDER BY reservation_count DESC
+      LIMIT 10`
+    );
+    return results.rows.map(c => {
+      return {customer: new Customer(c), reservations: c.reservation_count}
+    });
+    
+  }
+
   /** get a customer by ID. */
 
   static async get(id) {

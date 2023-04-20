@@ -32,6 +32,17 @@ router.get("/", async function(req, res, next) {
   }
 });
 
+/** Best customers: show list of customers with most reservations */
+
+router.get("/best", async function(req, res, next) {
+  try {
+    const customersAndReservations = await Customer.bestCustomers();
+    return res.render("best_customer_list.html",  {customersAndReservations});
+  } catch (err) {
+    return next(err);
+  }
+});
+
 /** Form to add a new customer. */
 
 router.get("/add/", async function(req, res, next) {
