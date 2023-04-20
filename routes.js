@@ -7,6 +7,17 @@ const Reservation = require("./models/reservation");
 
 const router = new express.Router();
 
+/** Get Customer ID from search then redirect */
+
+router.get('/search', async (req, res, next) => {
+  try {
+    const customer = await Customer.getByName(req.query.fullName);
+    return res.redirect(`/${customer.id}`)
+  } catch (e) {
+    return next(e)
+  }
+})
+
 /** Homepage: show list of customers. */
 
 router.get("/", async function(req, res, next) {
