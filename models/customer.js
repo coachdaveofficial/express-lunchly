@@ -56,7 +56,9 @@ class Customer {
   /** get a customer by Full Name. */
 
   static async getByName(fullName) {
-    const [firstName, lastName] = fullName.split(' ');
+    let [firstName, lastName] = fullName.split(' ');
+    firstName = firstName.charAt(0).toUpperCase() + firstName.substr(1).toLowerCase();
+    lastName = lastName.charAt(0).toUpperCase() + lastName.substr(1).toLowerCase();
     const results = await db.query(
       `SELECT id, 
          first_name AS "firstName",  
@@ -70,7 +72,7 @@ class Customer {
     const customer = results.rows[0];
 
     if (customer === undefined) {
-      const err = new Error(`No such customer: ${id}`);
+      const err = new Error(`Could not find customer ${firstName} ${lastName}. Please check spelling and try again.`);
       err.status = 404;
       throw err;
     }

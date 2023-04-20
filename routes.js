@@ -12,6 +12,9 @@ const router = new express.Router();
 router.get('/search', async (req, res, next) => {
   try {
     const customer = await Customer.getByName(req.query.fullName);
+    if (!customer) {
+      throw new Error(`Could not find customer ${req.query.fullName}. Please check spelling and try again.`)
+    }
     return res.redirect(`/${customer.id}`)
   } catch (e) {
     return next(e)
